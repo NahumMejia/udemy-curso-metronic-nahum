@@ -11,16 +11,16 @@ const routes: Routes = [
     component: ProductsComponent,
     children: [
       {
-        path:'list',
-        component:ListProductComponent
+        path: 'list',
+        component: ListProductComponent
       },
       {
-        path:'registro',
-        component:CreateProductComponent
+        path: 'registro',
+        component: CreateProductComponent
       },
       {
-        path:'list/editar/:id',
-        component:EditProductComponent
+        path: 'list/editar/:id',
+        component: EditProductComponent
       }
     ]
   }
