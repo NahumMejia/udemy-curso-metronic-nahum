@@ -46,6 +46,32 @@
                         <i class="ki-duotone ki-loading fs-2"><span class="path1"></span><span class="path2"></span></i>
                     </button>
                 </div>
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <select class="form-select mb-2" [(ngModel)]="sucursale_price_multiple" name="sucursale_price_multiple" placeholder="Select an option">
+                            <ng-container *ngFor="let SUCURSALE of SUCURSALES">
+                                <option [value]="SUCURSALE.id">{{ SUCURSALE.name }}</option>
+                                    </ng-container>
+                        </select>
+                        </div>
+                    <div class="text-muted fs-7">Sucursal</div>
+
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <select class="form-select mb-2" [(ngModel)]="client_segment_price_multiple" name="client_segment_price_multiple" placeholder="Select an option">
+                            <ng-container *ngFor="let CLIENT_SEGMENT of CLIENT_SEGMENTS">
+                                <option [value]="CLIENT_SEGMENT.id">{{ CLIENT_SEGMENT.name }}</option>
+                                    </ng-container>
+                        </select>
+                    </div>
+                    <div class="text-muted fs-7">Segmento de cliente</div>
+
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <select class="form-select mb-2" [(ngModel)]="almacen_warehouse" name="almacen_warehouse" placeholder="Select an option">
+                            <ng-container *ngFor="let WAREHOUSE of WAREHOUSES">
+                                <option [value]="WAREHOUSE.id">{{ WAREHOUSE.name }}</option>
+                                    </ng-container>
+                        </select>
+                        </div>
+                    <div class="text-muted fs-7">Almacen</div>
             </div>
             <!--end::Search-->
         </div>

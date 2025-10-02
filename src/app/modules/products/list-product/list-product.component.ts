@@ -13,10 +13,16 @@ export class ListProductComponent {
     search:string = '';
     PRODUCTS:any = [];
     isLoading$:any;
+    WAREHOUSES:any = [];
+    CLIENT_SEGMENTS:any = [];
+    SUCURSALES:any = [];
     roles:any = [];
     disponibilidad:string = '';
+    almacen_warehouse:string = '';
+    client_segment_price_multiple:string = '';
     tax_selected:string = '';
     CATEGORIES:any = [];
+    sucursale_price_multiple:string = '';
     product_categorie_id:string = '';
     totalPages:number = 0;
     currentPage:number = 1;
@@ -41,6 +47,9 @@ export class ListProductComponent {
         disponibilidad: this.disponibilidad,
         tax_selected: this.tax_selected,
         search: this.search,
+        sucursale_price_multiple: this.sucursale_price_multiple,
+        almacen_warehouse: this.almacen_warehouse,
+        client_segment_price_multiple: this.client_segment_price_multiple,
       }
 
       this.productService.listProducts(page,data).subscribe((resp:any) => {
@@ -55,6 +64,9 @@ export class ListProductComponent {
         console.log(resp);
         //this.roles = resp.roles;
         this.CATEGORIES = resp.categories;
+        this.SUCURSALES = resp.sucursales;
+        this.WAREHOUSES = resp.almacens;
+        this.CLIENT_SEGMENTS = resp.segments_clients;
       })
     }
     getDisponibilidad(val:number){
