@@ -13,9 +13,11 @@ export class ListProductComponent {
     search:string = '';
     PRODUCTS:any = [];
     isLoading$:any;
-
     roles:any = [];
-
+    disponibilidad:string = '';
+    tax_selected:string = '';
+    CATEGORIES:any = [];
+    product_categorie_id:string = '';
     totalPages:number = 0;
     currentPage:number = 1;
     constructor(
@@ -30,11 +32,18 @@ export class ListProductComponent {
       //Add 'implements OnInit' to the class.
       this.isLoading$ = this.productService.isLoading$;
       this.listProducts();
-      //this.configAll();
+      this.configAll();
     }
 
     listProducts(page = 1){
-      this.productService.listProducts(page,this.search).subscribe((resp:any) => {
+      let data = {
+        product_categorie_id: this. product_categorie_id,
+        disponibilidad: this.disponibilidad,
+        tax_selected: this.tax_selected,
+        search: this.search,
+      }
+
+      this.productService.listProducts(page,data).subscribe((resp:any) => {
         console.log(resp);
         this.PRODUCTS = resp.products.data;
         this.totalPages = resp.total;
@@ -45,6 +54,7 @@ export class ListProductComponent {
       this.productService.configAll().subscribe((resp:any) => {
         console.log(resp);
         //this.roles = resp.roles;
+        this.CATEGORIES = resp.categories;
       })
     }
     getDisponibilidad(val:number){
