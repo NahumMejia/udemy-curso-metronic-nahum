@@ -12,6 +12,7 @@ export class EditProductComponent {
   is_discount:number = 1;
     tab_selected:number = 1;
   
+    ESPECIFICACIONES:any = [];
     title:string = '';
     imagen_product:any;
     imagen_previzualiza:any = 'assets/media/svg/files/blank-image.svg';
@@ -20,6 +21,7 @@ export class EditProductComponent {
     disponiblidad:string = '';
     tiempo_de_abastecimiento:number = 0;
     min_discount:number = 0;
+    provider_id = '';
     max_discount:number = 0;
     tax_selected:string = '1';
     importe_iva:number = 0;
@@ -29,7 +31,9 @@ export class EditProductComponent {
     is_gift:number = 1;
     umbral:number = 0;
     umbral_unit_id:string = '';
-  
+    key_v:string = '';
+    value_v:string = '';
+    PROVIDERS:any = [];
     weight:number = 0;
     width:number = 0;
     height:number = 0;
@@ -99,8 +103,8 @@ export class EditProductComponent {
         this.width = this.PRODUCT_SELECTED.width;
         this.height = this.PRODUCT_SELECTED.height;
         this.length = this.PRODUCT_SELECTED.length;
-
-
+        this.provider_id = this.PRODUCT_SELECTED.provider_id;
+        this.ESPECIFICACIONES = this.PRODUCT_SELECTED.specifications;
       });
 
 
@@ -112,6 +116,7 @@ export class EditProductComponent {
         this.UNITS = resp.units;
         this.CLIENT_SEGMENTS = resp.segments_clients;
         this.CATEGORIES = resp.categories;
+        this.PROVIDERS = resp.providers;
       })
     }
   
@@ -301,6 +306,9 @@ export class EditProductComponent {
       formData.append("umbral",this.umbral+"");
       formData.append("umbral_unit_id",this.umbral_unit_id);
       
+      formData.append("provider_id",this.provider_id);
+      formData.append("specifications",JSON.stringify(this.ESPECIFICACIONES));
+      
       //formData.append("WAREHOUSES_PRODUCT",JSON.stringify(this.WAREHOUSES_PRODUCT));
       //formData.append("WALLETS_PRODUCT",JSON.stringify(this.WALLETS_PRODUCT));
       
@@ -314,5 +322,19 @@ export class EditProductComponent {
         }
       })
     }
-    
+    removeEspecifi(i:number){
+      this.ESPECIFICACIONES.splice(i,1);
+    }
+    addEspecif(){
+      if (!this.key_v || !this.value_v){
+        this.toast.error("VALIDACIÓN", "Necesita digitar una propiedad y un valor")
+        return;
+      }
+      this.ESPECIFICACIONES.unshift({
+        key_v: this.key_v,
+        value_v: this.value_v,
+      })
+      this.key_v = '';
+      this.value_v = '';
+    }
 }

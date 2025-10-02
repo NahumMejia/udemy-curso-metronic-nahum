@@ -210,6 +210,64 @@
                                             <div class="text-muted fs-7">Set a description to the product for better visibility.</div>
                                             <!--end::Description-->
                                         </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <label class="required form-label">Proveedor: (OPCIONAL)</label>
+                                                <select class="form-select mb-2" [(ngModel)]="provider_id" name="provider_id">
+                                                    <option value="1" selected="selected">Vender los productos sin stock</option>
+                                                    <ng-container *ngFor="let PROVIDER of PROVIDERS">
+                                                        <option [value]="PROVIDER.id">{{PROVIDER.full_name}}</option>
+                                                    </ng-container>
+                                                </select>
+                                            </div>
+                                            <div class="col-8">
+                                                <label class="required form-label">Especificaciones: (OPCIONAL)</label>
+                                                <div class="d-flex">
+                                                    <input type="text" [(ngModel)]="key_v" name="key_v" class="form-control mb-2" placeholder="Propiedad" />
+                                                    <input type="text" [(ngModel)]="value_v" name="value_v" class="form-control mb-2" placeholder="Valor" />
+                                                    <button class="btn btn-primary btn-sm" (click)="addEspecif()">+</button>
+                                                </div>
+                                                <div>
+                                                    <div class="table-responsive">
+                                                    <table class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3">
+                                                       <thead>
+                                                          <tr class="fw-bold text-muted">
+                                                             <th class="">Propiedad</th>
+                                                             <th class="">Valor</th>
+                                                             <th class="">Actions</th>
+                                                          </tr>
+                                                       </thead>
+                                                       <tbody>
+
+                                                            <ng-container *ngFor="let ESPECIFICACION of ESPECIFICACIONES; let  i = index">
+                                                                <tr>
+                                                                   
+                                                                   <td>
+                                                                      <a href="#" class="text-gray-900 fw-bold text-hover-primary d-block mb-1 fs-6">{{ ESPECIFICACION.key_v }}</a>
+                                                                   </td>
+                                                                   
+                                                                  
+                                                       
+                                                                   <td class="text-gray-900 fw-bold text-hover-primary fs-6">
+                                                                    {{ ESPECIFICACION.value_v }}                     
+                                                                   </td>
+                                                                   <td class="">
+                                                                      
+                                                       
+                                                                      <a href="#" onclick="return false" (click)="removeEspecifi(i)" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
+                                                                      <i class="ki-duotone ki-trash fs-2"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></i>                                </a>
+                                                       
+                                                                   </td>
+                                                                </tr>
+                                                            </ng-container>
+                                                            
+                                                 
+                                                       </tbody>
+                                                    </table>
+                                                 </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <!--end::Input group-->
                                     </div>
                                     <!--end::Card header-->
