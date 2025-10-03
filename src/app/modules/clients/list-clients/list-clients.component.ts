@@ -51,7 +51,7 @@ export class ListClientsComponent {
     createClientCompany(){
       const modalRef = this.modalService.open(CreateClientsCompanyComponent,{centered:true, size: 'md'});
   
-      modalRef.componentInstance.ClientSegmentC.subscribe((client_segment:any) => {
+      modalRef.componentInstance.ClientsC.subscribe((client_segment:any) => {
         this.CLIENTS.unshift(client_segment);
       })
     }
