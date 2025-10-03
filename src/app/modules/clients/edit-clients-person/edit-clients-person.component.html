@@ -45,12 +45,20 @@
                         <div class="d-flex flex-column scroll-y">
                             <!--begin::Input group-->
                             <div class="fv-row row mb-7">
-                                <div class="col-6">
+                                <div class="col-4">
                                     <!--begin::Label-->
-                                    <label class="required fw-bold fs-6 mb-2">Nombre de la empresa: (*) </label>
+                                    <label class="required fw-bold fs-6 mb-2">Nombre completo: (*) </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="text" name="name" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Razon social" [(ngModel)]="full_name" />
+                                    <input type="text" name="name" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Nombre" [(ngModel)]="name" />
+                                    <!--end::Input-->
+                                </div>
+                                <div class="col-4">
+                                    <!--begin::Label-->
+                                    <label class="required fw-bold fs-6 mb-2">Apellido completo: (*) </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" name="surname" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Apellido" [(ngModel)]="surname" />
                                     <!--end::Input-->
                                 </div>
                                 <div class="col-4">
@@ -82,26 +90,23 @@
                                         [(ngModel)]="type_document"
                                         placeholder="Selec. Tipo"
                                     >
-                                    <option value="RUC">RUC</option>
-                                    <option value="RUC 20">RUC 20</option>
+                                        <option value="">Ninguno</option>
+                                        <option value="DNI">DNI</option>
+                                        <option value="RUC">RUC</option>
+                                        <option value="CARNET DE EXTRANJERIA">CARNET DE EXTRANJERIA</option>
                                     </select>
             
                                 </div>
             
-                                <div class="col-6">
+                                <div class="col-4">
                                     <!--begin::Label-->
-                                    <label class="required fw-bold fs-6 mb-2">N° de RUC: (*) </label>
+                                    <label class="required fw-bold fs-6 mb-2">N° de documento: (*) </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <input type="number" name="n_document" [(ngModel)]="n_document" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="#00000000" />
                                     <!--end::Input-->
                                 </div>
             
-                                
-            
-                            </div>
-            
-                            <div class="fv-row row mb-7">
                                 <div class="col-4">
                                     <!--begin::Label-->
                                     <label class="required fw-bold fs-6 mb-2">Origen: (*) </label>
@@ -120,9 +125,37 @@
                                     </select>
             
                                 </div>
+            
+                            </div>
+            
+                            <div class="fv-row row mb-7">
                                 <div class="col-4">
                                     <!--begin::Label-->
-                                    <label class="required fw-bold fs-6 mb-2">Aniversario: (*) </label>
+                                    <label class="required fw-bold fs-6 mb-2">Sexo: (*) </label>
+                                    
+                                    <div class="d-flex mt-3">
+                                        <!--begin::Radio-->
+                                        <div class="form-check form-check-custom form-check-solid me-5">
+                                            <input class="form-check-input" type="radio" value="1" name="sexo" id="sexo_yes" [checked]="sexo == 1 ? true : false" (click)="sexo = 1">
+                                            <label class="form-check-label" for="sexo_yes">
+                                                Hombre
+                                            </label>
+                                        </div>
+                        
+                                        <div class="form-check form-check-custom form-check-solid">
+                                            <input class="form-check-input" type="radio" value="2" name="sexo" id="sexo_no" [checked]="sexo == 2 ? true : false" (click)="sexo = 2">
+                                            <label class="form-check-label" for="sexo_no">
+                                                Mujer
+                                            </label>
+                                        </div>
+                                        <!--end::Radio-->
+                                    </div>
+            
+                                </div>
+            
+                                <div class="col-4">
+                                    <!--begin::Label-->
+                                    <label class="required fw-bold fs-6 mb-2">Cumpleaño: (*) </label>
                                     <!--end::Label-->
                                     <div class="input-group input-group-solid">
                                         <input type="date"

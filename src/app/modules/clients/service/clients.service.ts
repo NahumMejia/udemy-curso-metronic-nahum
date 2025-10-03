@@ -9,7 +9,7 @@ import { AuthService } from '../../auth';
 })
 export class ClientsService {
 
-isLoading$: Observable<boolean>;
+  isLoading$: Observable<boolean>;
   isLoadingSubject: BehaviorSubject<boolean>;
   
   constructor(
@@ -23,17 +23,35 @@ isLoading$: Observable<boolean>;
   registerClient(data:any) {
     this.isLoadingSubject.next(true);
     let headers = new HttpHeaders({'Authorization': 'Bearer '+ this.authservice.token});
-    let URL = URL_SERVICIOS+"/client";
+    let URL = URL_SERVICIOS+"/clients";
     return this.http.post(URL,data,{headers: headers}).pipe(
       finalize(() => this.isLoadingSubject.next(false))
     );
   }
 
-  listClient(page = 1,search:string = ''){
+  importClient(data:any) {
     this.isLoadingSubject.next(true);
     let headers = new HttpHeaders({'Authorization': 'Bearer '+ this.authservice.token});
-    let URL = URL_SERVICIOS+"/client_page="+page+"&search="+search;
+    let URL = URL_SERVICIOS+"/clients/import";
+    return this.http.post(URL,data,{headers: headers}).pipe(
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
+
+  listConfig(){
+    this.isLoadingSubject.next(true);
+    let headers = new HttpHeaders({'Authorization': 'Bearer '+ this.authservice.token});
+    let URL = URL_SERVICIOS+"/clients/config";
     return this.http.get(URL,{headers: headers}).pipe(
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
+
+  listClients(page = 1,data:any = {}){
+    this.isLoadingSubject.next(true);
+    let headers = new HttpHeaders({'Authorization': 'Bearer '+ this.authservice.token});
+    let URL = URL_SERVICIOS+"/clients/index?page="+page;
+    return this.http.post(URL,data,{headers: headers}).pipe(
       finalize(() => this.isLoadingSubject.next(false))
     );
   }
@@ -41,7 +59,7 @@ isLoading$: Observable<boolean>;
   updateClient(ID_CLIENT_SEGMENT:string,data:any) {
     this.isLoadingSubject.next(true);
     let headers = new HttpHeaders({'Authorization': 'Bearer '+ this.authservice.token});
-    let URL = URL_SERVICIOS+"/client/"+ID_CLIENT_SEGMENT;
+    let URL = URL_SERVICIOS+"/clients/"+ID_CLIENT_SEGMENT;
     return this.http.put(URL,data,{headers: headers}).pipe(
       finalize(() => this.isLoadingSubject.next(false))
     );
@@ -50,9 +68,10 @@ isLoading$: Observable<boolean>;
   deleteClient(ID_CLIENT_SEGMENT:string) {
     this.isLoadingSubject.next(true);
     let headers = new HttpHeaders({'Authorization': 'Bearer '+ this.authservice.token});
-    let URL = URL_SERVICIOS+"/client/"+ID_CLIENT_SEGMENT;
+    let URL = URL_SERVICIOS+"/clients/"+ID_CLIENT_SEGMENT;
     return this.http.delete(URL,{headers: headers}).pipe(
       finalize(() => this.isLoadingSubject.next(false))
     );
   }
+  
 }

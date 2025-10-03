@@ -7,11 +7,11 @@ import { UBIGEO_REGIONES } from 'src/app/config/ubigeo_regiones';
 import { ClientsService } from '../service/clients.service';
 
 @Component({
-  selector: 'app-edit-clients-company',
-  templateUrl: './edit-clients-company.component.html',
-  styleUrls: ['./edit-clients-company.component.scss']
+  selector: 'app-edit-clients-person',
+  templateUrl: './edit-clients-person.component.html',
+  styleUrls: ['./edit-clients-person.component.scss']
 })
-export class EditClientsCompanyComponent {
+export class EditClientsPersonComponent {
 
   @Output() ClientsE: EventEmitter<any> = new EventEmitter();
 
@@ -19,7 +19,8 @@ export class EditClientsCompanyComponent {
   @Input() client_segments:any = [];
   @Input() asesores:any = [];
 
-  full_name:string = '';
+  name:string = '';
+  surname:string = '';
   client_segment_id:string = '';
   type_document:string = '';
   n_document:number = 0;
@@ -58,7 +59,8 @@ export class EditClientsCompanyComponent {
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-    this.full_name = this.client_selected.full_name;
+    this.name = this.client_selected.name;
+    this.surname = this.client_selected.surname;
     this.client_segment_id = this.client_selected.client_segment_id;
     this.type_document = this.client_selected.type_document;
     this.n_document = this.client_selected.n_document;
@@ -107,7 +109,7 @@ export class EditClientsCompanyComponent {
     this.is_parcial = this.is_parcial == 1 ? 2 : 1;
   }
   store(){
-    if(!this.full_name || !this.client_segment_id || 
+    if(!this.name || !this.surname || !this.client_segment_id || 
       !this.type_document || !this.n_document || !this.origen || 
       !this.sexo || !this.birthdate || !this.phone
       || !this.ubigeo_region || !this.ubigeo_provincia || !this.ubigeo_distrito
@@ -121,7 +123,9 @@ export class EditClientsCompanyComponent {
       this.distrito = DISTRITO_SELECTED.name;
     }
     let data = {
-      full_name: this.full_name,
+      name: this.name,
+      surname: this.surname,
+      full_name: this.name + ' ' + this.surname,
       client_segment_id: this.client_segment_id,
       type_document: this.type_document,
       n_document: this.n_document,

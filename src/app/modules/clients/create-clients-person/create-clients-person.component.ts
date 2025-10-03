@@ -8,10 +8,10 @@ import { UBIGEO_DISTRITOS } from 'src/app/config/ubigeo_distritos';
 
 @Component({
   selector: 'app-create-clients-person',
-  templateUrl: './create-clients-persona.component.html',
-  styleUrls: ['./create-clients-persona.component.scss']
+  templateUrl: './create-clients-person.component.html',
+  styleUrls: ['./create-clients-person.component.scss']
 })
-export class CreateClientsPersonaComponent {
+export class CreateClientsPersonComponent {
 
   @Output() ClientsC: EventEmitter<any> = new EventEmitter();
 
@@ -104,7 +104,27 @@ export class CreateClientsPersonaComponent {
       this.distrito = DISTRITO_SELECTED.name;
     }
     let data = {
-      
+      name: this.name,
+      surname: this.surname,
+      full_name: this.name + ' ' + this.surname,
+      client_segment_id: this.client_segment_id,
+      type_document: this.type_document,
+      n_document: this.n_document,
+      origen: this.origen,
+      sexo: this.sexo,
+      birthdate: this.birthdate,
+      phone: this.phone,
+      email: this.email,
+      asesor_id: this.asesor_id,
+      ubigeo_region: this.ubigeo_region,
+      ubigeo_provincia: this.ubigeo_provincia,
+      ubigeo_distrito: this.ubigeo_distrito,
+      region: this.region,
+      provincia:this.provincia,
+      distrito: this.distrito,
+      address: this.address,
+      is_parcial: this.is_parcial,
+      type: 1,
     }
 
     this.clientsService.registerClient(data).subscribe((resp:any) => {
