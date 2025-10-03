@@ -36,12 +36,15 @@ import { OpenDetailProformaComponent } from './componets/open-detail-proforma/op
   imports: [
     CommonModule,
     ProformasRoutingModule,
+
     HttpClientModule,
     FormsModule,
     NgbModule,
     ReactiveFormsModule,
     InlineSVGModule,
     NgbModalModule,
+
+
     NgbPaginationModule,
   ]
 })
