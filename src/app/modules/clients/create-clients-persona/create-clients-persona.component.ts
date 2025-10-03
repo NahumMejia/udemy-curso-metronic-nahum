@@ -2,6 +2,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ClientsService } from '../service/clients.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+import { UBIGEO_REGIONES } from 'src/app/config/ubigeo_regiones';
+import { UBIGEO_PROVINCIA } from 'src/app/config/ubigeo_provincias';
+import { UBIGEO_DISTRITOS } from 'src/app/config/ubigeo_distritos';
 
 @Component({
   selector: 'app-create-clients-person',
@@ -27,7 +30,23 @@ export class CreateClientsPersonaComponent {
   email:string = '';
   asesor_id:string = '';
 
-  
+  REGIONES:any = UBIGEO_REGIONES;
+  PROVINCIAS:any = UBIGEO_PROVINCIA;
+  DISTRITOS:any = UBIGEO_DISTRITOS;
+
+  PROVINCIA_SELECTEDS:any  =[];
+  DISTRITO_SELECTEDS:any = [];
+  tab_selected:number = 1;
+  ubigeo_region:string = '';
+  ubigeo_provincia:string = '';
+  ubigeo_distrito:string = '';
+  region:string = '';
+  provincia:string = '';
+  distrito:string = '';
+  address:string = '';
+  is_parcial:number = 1;
+  isLoading:any;
+
   constructor(
     public modal: NgbActiveModal,
     public clientsService: ClientsService,
@@ -85,27 +104,7 @@ export class CreateClientsPersonaComponent {
       this.distrito = DISTRITO_SELECTED.name;
     }
     let data = {
-      name: this.name,
-      surname: this.surname,
-      full_name: this.name + ' ' + this.surname,
-      client_segment_id: this.client_segment_id,
-      type_document: this.type_document,
-      n_document: this.n_document,
-      origen: this.origen,
-      sexo: this.sexo,
-      birthdate: this.birthdate,
-      phone: this.phone,
-      email: this.email,
-      asesor_id: this.asesor_id,
-      ubigeo_region: this.ubigeo_region,
-      ubigeo_provincia: this.ubigeo_provincia,
-      ubigeo_distrito: this.ubigeo_distrito,
-      region: this.region,
-      provincia:this.provincia,
-      distrito: this.distrito,
-      address: this.address,
-      is_parcial: this.is_parcial,
-      type: 1,
+      
     }
 
     this.clientsService.registerClient(data).subscribe((resp:any) => {
