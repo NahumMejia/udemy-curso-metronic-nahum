@@ -7,13 +7,16 @@ import { CreateProformaComponent } from './create-proforma/create-proforma.compo
 import { EditProformaComponent } from './edit-proforma/edit-proforma.component';
 import { ListProformasComponent } from './list-proformas/list-proformas.component';
 import { DeleteProformaComponent } from './delete-proforma/delete-proforma.component';
-import { SearchProductsComponent } from './components/search-products/search-products.component';
-import { SearchClientsComponent } from './components/search-clients/search-clients.component';
-import { AddPaymentsComponent } from './components/add-payments/add-payments.component';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { NgbModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
-import { ReactiveFormsModule } from '@angular/forms';
+import { SearchProductsComponent } from './componets/search-products/search-products.component';
+import { SearchClientsComponent } from './componets/search-clients/search-clients.component';
+import { AddPaymentsComponent } from './componets/add-payments/add-payments.component';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgbModule, NgbModalModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { InlineSVGModule } from 'ng-inline-svg-2';
+import { EditProductDetailProformaComponent } from './componets/edit-product-detail-proforma/edit-product-detail-proforma.component';
+import { DeleteProductDetailProformaComponent } from './componets/delete-product-detail-proforma/delete-product-detail-proforma.component';
+import { OpenDetailProformaComponent } from './componets/open-detail-proforma/open-detail-proforma.component';
 
 
 @NgModule({
@@ -25,15 +28,20 @@ import { InlineSVGModule } from 'ng-inline-svg-2';
     DeleteProformaComponent,
     SearchProductsComponent,
     SearchClientsComponent,
-    AddPaymentsComponent
+    AddPaymentsComponent,
+    EditProductDetailProformaComponent,
+    DeleteProductDetailProformaComponent,
+    OpenDetailProformaComponent
   ],
   imports: [
     CommonModule,
     ProformasRoutingModule,
     HttpClientModule,
+    FormsModule,
     NgbModule,
     ReactiveFormsModule,
     InlineSVGModule,
+    NgbModalModule,
     NgbPaginationModule,
   ]
 })
