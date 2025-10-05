@@ -15,7 +15,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule, NgbModalModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { InlineSVGModule } from 'ng-inline-svg-2';
-
+import { ShowDetailsPaymentsComponent } from './lists-caja-process/show-details-payments/show-details-payments.component';
+import { CajaIngresoCreateComponent } from './caja-ingreso-create/caja-ingreso-create.component';
+import { CajaIngresoEditComponent } from './caja-ingreso-create/caja-ingreso-edit/caja-ingreso-edit.component';
+import { CajaIngresoDeleteComponent } from './caja-ingreso-create/caja-ingreso-delete/caja-ingreso-delete.component';
+import { CajaEgresoCreateComponent } from './caja-egreso-create/caja-egreso-create.component';
+import { CajaEgresoEditComponent } from './caja-egreso-create/caja-egreso-edit/caja-egreso-edit.component';
+import { CajaEgresoDeleteComponent } from './caja-egreso-create/caja-egreso-delete/caja-egreso-delete.component';
 
 @NgModule({
   declarations: [
@@ -27,18 +33,26 @@ import { InlineSVGModule } from 'ng-inline-svg-2';
     CajaReportDayComponent,
     CajaHistoryComponent,
     CajaNewPaymentComponent,
-    CajaEditPaymentComponent
+    CajaEditPaymentComponent,
+    ShowDetailsPaymentsComponent,
+    CajaIngresoCreateComponent,
+    CajaIngresoEditComponent,
+    CajaIngresoDeleteComponent,
+    CajaEgresoCreateComponent,
+    CajaEgresoEditComponent,
+    CajaEgresoDeleteComponent,
   ],
   imports: [
     CommonModule,
     CajasRoutingModule,
+
     HttpClientModule,
     FormsModule,
     NgbModule,
     ReactiveFormsModule,
     InlineSVGModule,
     NgbModalModule,
-    NgbPaginationModule, 
+    NgbPaginationModule,
   ]
 })
 export class CajasModule { }
