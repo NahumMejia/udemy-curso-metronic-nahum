@@ -49,54 +49,34 @@ export class ListsCajaProcessComponent {
     
   }
 
-ngOnInit(): void {
-  this.isLoading$ = this.cajaService.isLoading$;
-
-  const user = this.cajaService.authservice?.user;
-
-  if (user && user.sucursale_id) {
-    this.sucursale_id = user.sucursale_id;
+  ngOnInit(): void {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
+    this.isLoading$ = this.cajaService.isLoading$;
+    this.sucursale_id = this.cajaService.authservice.user.sucursale_id;
     this.configCaja();
   }
-}
 
-
-configCaja() {
-  if (!this.sucursale_id) {
-    console.warn('No hay sucursale_id definido');
-    return;
-  }
-
-  this.PROFORMAS = [];
-  this.egresos = [];
-  this.ingresos = [];
-
-  this.cajaService.configCaja(this.sucursale_id).subscribe({
-    next: (resp: any) => {
+  configCaja(){
+    this.PROFORMAS = [];
+    this.egresos = [];
+    this.ingresos = [];
+    this.cajaService.configCaja(this.sucursale_id).subscribe((resp:any) => {
       console.log(resp);
-
-      this.caja = resp.caja;
+      this.caja = resp.caja
       this.caja_sucursale = resp.caja_sucursale;
-
-      if (this.caja_sucursale) {
+      if(this.caja_sucursale){
         this.listProformasProcess();
         this.listIngresos();
         this.listEgresos();
       }
-
       this.created_at_apertura = resp.created_at_apertura;
-      if (this.sucursales.length === 0) {
+      if(this.sucursales.length == 0){
         this.sucursales = resp.sucursales;
       }
-
       this.method_payments = resp.method_payments;
-    },
-    error: (err) => {
-      console.error('Error al cargar configCaja:', err);
-    }
-  });
-}
-
+    })
+  }
 
   changeSucursale($event:any){
     this.configCaja();
