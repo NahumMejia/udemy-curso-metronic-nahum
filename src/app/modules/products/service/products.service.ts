@@ -74,13 +74,13 @@ export class ProductsService {
     );
   }
 
-  // deleteUser(ID_USER:string) {
-  //   this.isLoadingSubject.next(true);
-  //   let headers = new HttpHeaders({'Authorization': 'Bearer '+ this.authservice.token});
-  //   let URL = URL_SERVICIOS+"/users/"+ID_USER;
-  //   return this.http.delete(URL,{headers: headers}).pipe(
-  //     finalize(() => this.isLoadingSubject.next(false))
-  //   );
-  // }
+  deleteProduct(ID_PRODUCT:string) {
+    this.isLoadingSubject.next(true);
+    let headers = new HttpHeaders({'Authorization': 'Bearer '+ this.authservice.token});
+    let URL = URL_SERVICIOS+"/products/"+ID_PRODUCT;
+    return this.http.delete(URL,{headers: headers}).pipe(
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
 
 }

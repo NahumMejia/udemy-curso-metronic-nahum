@@ -86,7 +86,7 @@ export class CreateProvidersComponent {
         this.toast.error("Validación",resp.message_text);
       }else{
         this.toast.success("Exito","El provedor se registro correctamente");
-        this.ProviderC.emit(resp.categorie);
+        this.ProviderC.emit(resp.provider);
         this.modal.close();
       }
     })

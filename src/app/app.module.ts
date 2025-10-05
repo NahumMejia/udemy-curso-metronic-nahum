@@ -27,8 +27,18 @@ function appInitializer(authService: AuthService) {
   };
 }
 
+// Create a separate array for mock modules
+const mockModules = environment.isMockEnabled
+  ? [
+      HttpClientInMemoryWebApiModule.forRoot(FakeAPIService, {
+        passThruUnknownUrl: true,
+        dataEncapsulation: false,
+      }),
+    ]
+  : [];
+
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent,],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
