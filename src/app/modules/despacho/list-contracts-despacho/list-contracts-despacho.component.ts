@@ -48,26 +48,23 @@ export class ListContractsDespachoComponent {
   }
 
   listContracts(page = 1){
-  let data = {
-    search: this.search,
-    client_segment_id: this.client_segment_id,
-    asesor_id: this.asesor_id,
-    product_categorie_id:this.product_categorie_id,
-    search_client:this.search_client,
-    search_product:this.search_product,
-    start_date: this.start_date,
-    end_date: this.end_date,
+    let data = {
+      search: this.search,
+      client_segment_id: this.client_segment_id,
+      asesor_id: this.asesor_id,
+      product_categorie_id:this.product_categorie_id,
+      search_client:this.search_client,
+      search_product:this.search_product,
+      start_date: this.start_date,
+      end_date: this.end_date,
+    }
+    this.despachoService.listContracts(page,data).subscribe((resp:any) => {
+      console.log(resp);
+      this.CONTRACTS = resp.contracts.data;
+      this.totalPages = resp.total;
+      this.currentPage = page;
+    })
   }
-  this.despachoService.listContracts(page,data).subscribe((resp:any) => {
-    console.log('RESPUESTA COMPLETA:', resp);
-    console.log('TOTAL:', resp.total);
-    console.log('CONTRACTS:', resp.contracts);
-    console.log('CONTRACTS DATA:', resp.contracts.data);
-    this.CONTRACTS = resp.contracts.data;
-    this.totalPages = resp.total;
-    this.currentPage = page;
-  })
-}
   resetlistContracts(){
     this.search = '';
     this.client_segment_id = '';
