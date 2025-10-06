@@ -1,22 +1,22 @@
 import { Component } from '@angular/core';
-import { PurchaseService } from '../service/purchase.service';
+import { TransportsService } from '../service/transports.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SearchProductsComponent } from '../../proformas/componets/search-products/search-products.component';
-import { EditItemPurchaseComponent } from '../components/edit-item-purchase/edit-item-purchase.component';
-import { DeleteItemPurchaseComponent } from '../components/delete-item-purchase/delete-item-purchase.component';
+import { EditDetailTransportsComponent } from '../components/edit-detail-transports/edit-detail-transports.component';
+import { DeleteDetailTransportsComponent } from '../components/delete-detail-transports/delete-detail-transports.component';
 
 @Component({
-  selector: 'app-create-purchase',
-  templateUrl: './create-purchase.component.html',
-  styleUrls: ['./create-purchase.component.scss']
+  selector: 'app-create-transports',
+  templateUrl: './create-transports.component.html',
+  styleUrls: ['./create-transports.component.scss']
 })
-export class CreatePurchaseComponent {
+export class CreateTransportsComponent {
 
   full_name_user:string = '';
   sucursal_user:string = '';
-  warehouse_id:string = '';
-  provider_id:string = '';
+  warehouse_start_id:string = '';
+  warehouse_end_id:string = '';
 
   date_emision:any = null;
   type_comprobant:string = '';
@@ -35,15 +35,15 @@ export class CreatePurchaseComponent {
 
   user:any;
 
-  warehouses:any = [];
-  providers:any = [];
+  warehouses_start:any = [];
+  warehouses_end:any = [];
   units:any = [];
 
   isLoading$:any;
   PRODUCT_SELECTED:any;
-  PURCHASE_DETAILS:any = [];
+  TRANSPORTS_DETAILS:any = [];
   constructor(
-    public purchaseService: PurchaseService,
+    public transportService: TransportsService,
     public toast: ToastrService,
     public modalService: NgbModal,
   ) {
@@ -53,27 +53,26 @@ export class CreatePurchaseComponent {
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-    this.user = this.purchaseService.authservice.user;
+    this.user = this.transportService.authservice.user;
     this.full_name_user = this.user.full_name;
     this.sucursal_user = this.user.sucursale_name;
     this.configAll();
-    this.isLoading$ = this.purchaseService.isLoading$;
+    this.isLoading$ = this.transportService.isLoading$;
   }
 
   configAll(){
-    this.purchaseService.configAll().subscribe((resp:any) => {
-      console.log('DATOS RECIBIDOS DE configAll:', resp);
-      this.warehouses = resp.warehouses;
-      this.providers = resp.providers;
-      this.units = resp.units;
+    this.transportService.configAll().subscribe((resp:any) => {
+      this.warehouses_start = resp.warehouses;
+      this.warehouses_end = resp.warehouses;
+      // this.units = resp.units;
       this.date_emision = resp.now;
     })
   }
 
   isLoadingProcess(){
-    this.purchaseService.isLoadingSubject.next(true);
+    this.transportService.isLoadingSubject.next(true);
     setTimeout(() => {
-      this.purchaseService.isLoadingSubject.next(false);
+      this.transportService.isLoadingSubject.next(false);
     }, 50);
   }
 
@@ -82,7 +81,11 @@ export class CreatePurchaseComponent {
       this.toast.error("Validación","Necesitas ingresar al menos uno de los campos");
       return;
     }
-    this.purchaseService.searchProducts(this.search_product).subscribe((resp:any) => {
+    if(!this.warehouse_start_id){
+      this.toast.error("Validacion","Se necesita seleccionar un almacen de atención");
+      return;
+    }
+    this.transportService.searchProducts(this.search_product).subscribe((resp:any) => {
       console.log(resp);
       if(resp.products.data.length > 1){
         this.openSelectedProduct(resp.products.data);
@@ -90,6 +93,7 @@ export class CreatePurchaseComponent {
         if(resp.products.data.length == 1){
           this.PRODUCT_SELECTED = resp.products.data[0];
           this.search_product = this.PRODUCT_SELECTED.title;
+          this.units = this.PRODUCT_SELECTED.warehouses.filter((warehouse:any) => warehouse.warehouse.id == this.warehouse_start_id);
           this.toast.success("Exito","Se selecciono el producto ");
           this.isLoadingProcess();
         }else{
@@ -106,13 +110,17 @@ export class CreatePurchaseComponent {
     modalRef.componentInstance.ProductSelected.subscribe((product:any) => {
       this.PRODUCT_SELECTED = product;
       this.search_product = this.PRODUCT_SELECTED.title;
+      this.units = this.PRODUCT_SELECTED.warehouses.filter((warehouse:any) => warehouse.warehouse.id == this.warehouse_start_id);
       this.isLoadingProcess();
       this.toast.success("Exito","Se selecciono el producto");
     })
   }
-
+  updatedUnit(){
+    if(this.PRODUCT_SELECTED){
+      this.units = this.PRODUCT_SELECTED.warehouses.filter((warehouse:any) => warehouse.warehouse.id == this.warehouse_start_id);
+    }
+  }
   addDetail(){
-
     if(!this.PRODUCT_SELECTED){
       this.toast.error("Validacion","Se necesita seleccionar un producto");
       return;
@@ -122,21 +130,24 @@ export class CreatePurchaseComponent {
       return;
     }
 
-    if(!this.price_unit){
-      this.toast.error("Validacion","Se necesita digitar un precio");
-      return;
-    }
+    // if(!this.price_unit){
+    //   this.toast.error("Validacion","Se necesita digitar un precio");
+    //   return;
+    // }
 
     if(!this.quantity){
       this.toast.error("Validacion","Se necesita digitar una cantidad");
       return;
     }
-
-    let UNIDAD_SELECTED = this.units.find((unit:any) => unit.id == this.unit_id)
-
-    this.PURCHASE_DETAILS.push({
+    
+    let UNIDAD_SELECTED = this.units.find((unit:any) => unit.unit.id == this.unit_id)
+    if(UNIDAD_SELECTED && UNIDAD_SELECTED.quantity < this.quantity){
+      this.toast.error("Validacion","No puedes solicitar esa cantidad, porque no hay stock disponible ("+UNIDAD_SELECTED.quantity+")");
+      return;
+    }
+    this.TRANSPORTS_DETAILS.push({
       product: this.PRODUCT_SELECTED,
-      unit: UNIDAD_SELECTED,
+      unit: UNIDAD_SELECTED.unit,
       price_unit: this.price_unit,
       quantity: this.quantity,
       total: Number((this.price_unit*this.quantity).toFixed(2)),
@@ -147,24 +158,26 @@ export class CreatePurchaseComponent {
     this.price_unit = 0;
     this.quantity = 0;
     this.search_product = '';
+    this.units = [];
     this.calcTotalPurchase();
   }
 
   calcTotalPurchase(){
-    this.importe = Number(this.PURCHASE_DETAILS.reduce((sum:number,item:any) => sum+ item.total,0).toFixed(2));
+    this.importe = Number(this.TRANSPORTS_DETAILS.reduce((sum:number,item:any) => sum+ item.total,0).toFixed(2));
     this.igv = Number((this.importe*0.18).toFixed(2));
     this.total = Number((this.importe + this.igv).toFixed(2));
     this.isLoadingProcess();
   }
 
-  editItemPurchase(index:number,detail:any){
-    const modalRef = this.modalService.open(EditItemPurchaseComponent,{centered: true,size:'md'});
-    modalRef.componentInstance.detail_purchase = detail;
-    modalRef.componentInstance.units = this.units;
+  editItemTransport(index:number,detail:any){
+    const modalRef = this.modalService.open(EditDetailTransportsComponent,{centered: true,size:'md'});
+    modalRef.componentInstance.detail_transport = detail;
+    // modalRef.componentInstance.units = this.units;
+    modalRef.componentInstance.warehouse_start_id = this.warehouse_start_id;
     modalRef.componentInstance.index = index;
 
-    modalRef.componentInstance.EditItemPurchase.subscribe((detail_purchase:any) => {
-      this.PURCHASE_DETAILS[index] = detail_purchase;
+    modalRef.componentInstance.EditItemTranport.subscribe((detail_transport:any) => {
+      this.TRANSPORTS_DETAILS[index] = detail_transport;
       this.isLoadingProcess();
       setTimeout(() => {
         this.calcTotalPurchase();
@@ -172,13 +185,13 @@ export class CreatePurchaseComponent {
     })
   }
 
-  deleteItemPurchase(index:number,detail:any){
-    const modalRef = this.modalService.open(DeleteItemPurchaseComponent,{centered: true,size:'md'});
-    modalRef.componentInstance.detail_purchase = detail;
+  deleteItemTransport(index:number,detail:any){
+    const modalRef = this.modalService.open(DeleteDetailTransportsComponent,{centered: true,size:'md'});
+    modalRef.componentInstance.detail_transport = detail;
     modalRef.componentInstance.index = index;
 
-    modalRef.componentInstance.DeleteItemPurchase.subscribe((detail_purchase:any) => {
-      this.PURCHASE_DETAILS.splice(index,1);
+    modalRef.componentInstance.DeleteItemTransport.subscribe((detail_transport:any) => {
+      this.TRANSPORTS_DETAILS.splice(index,1);
       this.isLoadingProcess();
       setTimeout(() => {
         this.calcTotalPurchase();
@@ -186,60 +199,48 @@ export class CreatePurchaseComponent {
     })
   }
 
-  createOrderPurchase(){
+  createOrderTransport(){
 
-    if(!this.warehouse_id){
-      this.toast.error("Validacion","Necesitas seleccionar un almacen");
+    if(!this.warehouse_start_id){
+      this.toast.error("Validacion","Necesitas seleccionar un almacen de origen");
       return;
     }
 
-    if(!this.provider_id){
-      this.toast.error("Validacion","Necesitas seleccionar un proveedor");
+    if(!this.warehouse_end_id){
+      this.toast.error("Validacion","Necesitas seleccionar un almacen de llegada");
       return;
     }
 
-    if(!this.type_comprobant){
-      this.toast.error("Validacion","Necesitas seleccionar un tipo de comprobante");
-      return;
-    }
-
-    if(!this.n_comprobant){
-      this.toast.error("Validacion","Necesitas digitar un n° de comprobante");
-      return;
-    }
-    if(this.PURCHASE_DETAILS.length == 0){
+    if(this.TRANSPORTS_DETAILS.length == 0){
       this.toast.error("Validacion","Necesitas agregar al menos un producto al detallado");
       return;
     }
     let data = {
-      warehouse_id: this.warehouse_id,
-      provider_id: this.provider_id,
+      warehouse_start_id: this.warehouse_start_id,
+      warehouse_end_id: this.warehouse_end_id,
       date_emision: this.date_emision,
-      type_comprobant: this.type_comprobant,
-      n_comprobant: this.n_comprobant,
       description: this.description,
       importe: this.importe,
       igv: this.igv,
       total: this.total,
-      details: this.PURCHASE_DETAILS,
+      details: this.TRANSPORTS_DETAILS,
     }
 
-    this.purchaseService.createOrderPurchase(data).subscribe((resp:any) => {
+    this.transportService.createTransport(data).subscribe((resp:any) => {
       console.log(resp);
-      this.toast.success("Exito","La orden de compra se ha generado correctamente");
-      this.warehouse_id = '';
-      this.provider_id = '';
-      this.type_comprobant = '';
-      this.n_comprobant = '';
+      this.toast.success("Exito","La solicitud de transporte se ha generado correctamente");
+      this.warehouse_start_id = '';
+      this.warehouse_end_id = '';
       this.description = '';
       this.importe = 0;
       this.igv = 0;
       this.total = 0;
-      this.PURCHASE_DETAILS = [];
+      this.TRANSPORTS_DETAILS = [];
       this.calcTotalPurchase();
     },error => {
       console.log(error);
       this.toast.error("ERROR","Hubo un problema en el servidor con tu orden, comunicate con soporte");
     })
   }
+
 }

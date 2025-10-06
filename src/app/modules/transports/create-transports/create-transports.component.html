@@ -12,31 +12,32 @@
                 <input type="text" disabled name="name" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Por ejemplo: Lima" [(ngModel)]="sucursal_user" />
             </div>
             <div class="col-3">
-                <label class="required fw-bold fs-6 mb-2">Almacenes: (*) </label>
+                <label class="required fw-bold fs-6 mb-2">Almacen de Atención: (*) </label>
                 <select
                     class="form-control form-select-solid fw-bolder"
-                    name="warehouse_id"
-                    [(ngModel)]="warehouse_id"
+                    name="warehouse_start_id"
+                    [(ngModel)]="warehouse_start_id"
                     placeholder="Selec. Almacen"
+                    (change)="updatedUnit()"
                 >
                 <option value="">Ninguno</option>  
-                <ng-container *ngFor="let warehouse of warehouses">
+                <ng-container *ngFor="let warehouse of warehouses_start">
                     <option [value]="warehouse.id">{{ warehouse.name }}</option>  
                 </ng-container>
                   
                 </select>
             </div>
             <div class="col-3">
-                <label class="required fw-bold fs-6 mb-2">Proveedor: (*) </label>
+                <label class="required fw-bold fs-6 mb-2">Almacen de llegada: (*) </label>
                 <select
                     class="form-control form-select-solid fw-bolder"
-                    name="provider_id"
-                    [(ngModel)]="provider_id"
-                    placeholder="Selec. Proveedor"
+                    name="warehouse_end_id"
+                    [(ngModel)]="warehouse_end_id"
+                    placeholder="Selec. Almacen"
                 >
                 <option value="">Ninguno</option>    
-                <ng-container *ngFor="let provider of providers">
-                    <option [value]="provider.id">{{ provider.full_name }}</option>  
+                <ng-container *ngFor="let warehouse of warehouses_end">
+                    <option [value]="warehouse.id">{{ warehouse.name }}</option>  
                 </ng-container>
                 </select>
             </div>
@@ -52,51 +53,9 @@
                     />
                 </div>
             </div>
-            <div class="col-3">
-                <label class="required fw-bold fs-6 mb-2">Tipo de comprobante: (*) </label>
-                <select
-                    class="form-control form-select-solid fw-bolder"
-                    name="type_comprobant"
-                    [(ngModel)]="type_comprobant"
-                    placeholder="Selec. Tipo"
-                >
-                    <option value="">Ninguno</option>
-                    <option value="FACTURA ELECTRÓNICO">FACTURA ELECTRÓNICO</option>
-                    <option value="NOTA DE CREDITO">NOTA DE CREDITO</option>
-                    <option value="NOTA DE DEBITO">NOTA DE DEBITO</option>
-                    <option value="RECIBO POR HONARIOS">RECIBO POR HONARIOS</option>
-                    <option value="GUIA DE REMISION">GUIA DE REMISION</option>
-                </select>
-            </div>
-            <div class="col-3">
-                <label class="required fw-bold fs-6 mb-2">N° de Comprobante: (*) </label>
-                <input type="text" name="n_comprobant" [(ngModel)]="n_comprobant"  class="form-control form-control-solid mb-3 mb-lg-0" placeholder="F-0001" />
-            </div>
-            <div class="col-3">
-                <label class="required fw-bold fs-6 mb-2">State: (*) </label>
-                <select
-                    class="form-control form-select-solid fw-bolder"
-                    name="state"
-                    [(ngModel)]="state"
-                    placeholder="Selec. Tipo"
-                >
-                    <ng-container *ngIf="PURCHASE_SELECTED && PURCHASE_SELECTED.state != 3 && PURCHASE_SELECTED.state != 4">
-                        <option value="1">SOLICITUD</option>
-                        <option value="2">REVISIÓN</option>
-                    </ng-container>
-                    
-                    <option value="3" *ngIf="PURCHASE_SELECTED && PURCHASE_SELECTED.state == 3">PARCIAL</option>
-                    <option value="4" *ngIf="PURCHASE_SELECTED && PURCHASE_SELECTED.state == 4">ENTREGADO</option>
-                </select>
-            </div>
-        </div>
-        <div class="row align-items-center">
             <div class="col-4">
                 <label class="fs-6 fw-semibold mb-2">Nota Final:</label>
                 <textarea class="form-control form-control-solid" rows="3" name="description" [(ngModel)]="description" placeholder=""></textarea>
-            </div>
-            <div class="col-4">
-                <button class="btn btn-primary" *ngIf="PURCHASE_SELECTED && PURCHASE_SELECTED.state != 4" (click)="editOrderPurchase()">Editar Orden De Compra</button>
             </div>
         </div>
 
@@ -119,7 +78,7 @@
                 >
                 <option value="">Ninguno</option>   
                 <ng-container *ngFor="let unit of units">
-                    <option [value]="unit.id">{{ unit.name }}</option>  
+                    <option [value]="unit.unit.id">{{ unit.unit.name }}</option>  
                 </ng-container> 
                 </select>
             </div>
@@ -132,7 +91,7 @@
                 <input type="number" name="quantity" [(ngModel)]="quantity" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Por ejemplo: 49.50" />
             </div>
             <div class="col-2">
-                <button class="btn btn-sm btn-primary" (click)="addDetail()" *ngIf="PURCHASE_SELECTED && PURCHASE_SELECTED.state != 4">+</button>
+                <button class="btn btn-sm btn-primary" (click)="addDetail()">+</button>
             </div>
         </div>
 
@@ -142,7 +101,6 @@
                     <table class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3">
                        <thead>
                           <tr class="fw-bold text-muted">
-                            <th class="min-w-140px">Entrega</th>
                              <th class="min-w-140px">Producto</th>
                              <th class="min-w-120px">Unidad</th>
                              <th class="min-w-120px">Precio Unitario</th>
@@ -152,35 +110,31 @@
                           </tr>
                        </thead>
                        <tbody>
-                            <ng-container *ngFor="let PURCHASE_DETAIL of PURCHASE_DETAILS;let i=index">
+                            <ng-container *ngFor="let TRANSPORT_DETAIL of TRANSPORTS_DETAILS;let i=index">
                                 <tr>
-                                    <td class="text-gray-900 fw-bold text-hover-primary fs-6">
-                                        <div class="form-check form-check-custom form-check-solid mb-2" *ngIf="PURCHASE_DETAIL.state != 2">
-                                            <input class="form-check-input" type="checkbox" (click)="selectedDetail(PURCHASE_DETAIL)" />
-                                        </div>                
-                                     </td>
+                                   
                                   <td class="text-gray-900 fw-bold text-hover-primary fs-6">
-                                      {{ PURCHASE_DETAIL.product.title }}                   
+                                      {{ TRANSPORT_DETAIL.product.title }}                   
                                    </td>
                                    <td class="text-gray-900 fw-bold text-hover-primary fs-6">
-                                    {{ PURCHASE_DETAIL.unit.name }}                        
+                                    {{ TRANSPORT_DETAIL.unit.name }}                        
                                    </td>
                                    <td class="text-gray-900 fw-bold text-hover-primary fs-6">
-                                      {{ PURCHASE_DETAIL.price_unit }}  PEN          
+                                      {{ TRANSPORT_DETAIL.price_unit }}  PEN          
                                    </td>
                                    <td class="text-gray-900 fw-bold text-hover-primary fs-6">
-                                    {{ PURCHASE_DETAIL.quantity }}                  
+                                    {{ TRANSPORT_DETAIL.quantity }}                  
                                    </td>
                                    <td class="text-gray-900 fw-bold text-hover-primary fs-6">
-                                    {{ PURCHASE_DETAIL.total }} PEN               
+                                    {{ TRANSPORT_DETAIL.total }} PEN               
                                    </td>
       
                                    <td class="text-end">
                                       
-                                      <a href="#" onclick="return false" *ngIf="PURCHASE_DETAIL.state != 2" (click)="editItemPurchase(i,PURCHASE_DETAIL)" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                                      <a href="#" onclick="return false" (click)="editItemTransport(i,TRANSPORT_DETAIL)" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
                                       <i class="ki-duotone ki-pencil fs-2"><span class="path1"></span><span class="path2"></span></i>                                </a>
                        
-                                      <a href="#" onclick="return false" *ngIf="PURCHASE_DETAIL.state != 2" (click)="deleteItemPurchase(i,PURCHASE_DETAIL)" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
+                                      <a href="#" onclick="return false" (click)="deleteItemTransport(i,TRANSPORT_DETAIL)" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
                                       <i class="ki-duotone ki-trash fs-2"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></i>                                </a>
                        
                                    </td>
@@ -193,32 +147,25 @@
                             <td></td>
                             <td></td>
                             <td>
-                                <input type="number" name="importe" [(ngModel)]="importe" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Por ejemplo: 49.50" />
+                                <input type="number" disabled name="importe" [(ngModel)]="importe" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Por ejemplo: 49.50" />
                                 <small>Importe:</small>
                             </td>
                             <td>
-                                <input type="number" name="igv" [(ngModel)]="igv" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Por ejemplo: 49.50" />
+                                <input type="number" disabled name="igv" [(ngModel)]="igv" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Por ejemplo: 49.50" />
                                 <small>Igv:</small>
                             </td>
                             <td>
-                                <input type="number" name="total" [(ngModel)]="total" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Por ejemplo: 49.50" />
+                                <input type="number" disabled name="total" [(ngModel)]="total" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Por ejemplo: 49.50" />
                                 <small>Total:</small>
                             </td>
-                          </tr>
-
-                          <tr>
-                            <td></td>
-                            <td>
-                                <button class="btn btn-primary" *ngIf="PURCHASE_SELECTED && PURCHASE_SELECTED.state != 4" (click)="procesarEntrega()">Confirmar Entrega</button>
-                            </td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
                           </tr>
                        </tbody>
                     </table>
                  </div>
 
+            </div>
+            <div class="col-12">
+                <button class="btn btn-primary" (click)="createOrderTransport()">Generar Solicitud de Transporte</button>
             </div>
         </div>
     </div>
