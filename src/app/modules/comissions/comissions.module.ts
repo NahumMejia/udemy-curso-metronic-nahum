@@ -16,12 +16,15 @@ import { InlineSVGModule } from 'ng-inline-svg-2';
   imports: [
     CommonModule,
     ComissionsRoutingModule,
+
     HttpClientModule,
     FormsModule,
     NgbModule,
     ReactiveFormsModule,
     InlineSVGModule,
     NgbModalModule,
+
+
     NgbPaginationModule,
   ]
 })
