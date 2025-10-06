@@ -62,7 +62,6 @@ export class CreatePurchaseComponent {
 
   configAll(){
     this.purchaseService.configAll().subscribe((resp:any) => {
-      console.log('DATOS RECIBIDOS DE configAll:', resp);
       this.warehouses = resp.warehouses;
       this.providers = resp.providers;
       this.units = resp.units;

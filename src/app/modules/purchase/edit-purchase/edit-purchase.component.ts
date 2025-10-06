@@ -69,31 +69,29 @@ export class EditPurchaseComponent {
     this.isLoading$ = this.purchaseService.isLoading$;
   }
   
- showPurchase(){
-  this.purchaseService.showPurchase(this.ORDER_PURCHASE_ID).subscribe((resp:any) => {
-    console.log(resp);
-    this.PURCHASE_SELECTED = resp.purchase;
-    
-    // Usar optional chaining (?.) para evitar errores con null
-    this.full_name_user = this.PURCHASE_SELECTED.user?.full_name || '';
-    this.sucursal_user = this.PURCHASE_SELECTED.user?.sucursale?.name || 'Sin sucursal'; // ← CAMBIAR AQUÍ
-    this.warehouse_id = this.PURCHASE_SELECTED.warehouse_id || '';
-    this.provider_id = this.PURCHASE_SELECTED.provider_id || '';
-    this.date_emision = this.PURCHASE_SELECTED.date_emision || null;
-    this.type_comprobant = this.PURCHASE_SELECTED.type_comprobant || '';
-    this.n_comprobant = this.PURCHASE_SELECTED.n_comprobant || '';
-    this.description = this.PURCHASE_SELECTED.description || '';
-    this.PURCHASE_DETAILS = this.PURCHASE_SELECTED.details || [];
-    this.importe = this.PURCHASE_SELECTED.importe || 0;
-    this.igv = this.PURCHASE_SELECTED.igv || 0;
-    this.total = this.PURCHASE_SELECTED.total || 0;
-    this.state = this.PURCHASE_SELECTED.state || '';
-    
-    if(this.warehouses.length == 0){
-      this.configAll();
-    }
-  })
-}
+  showPurchase(){
+    this.purchaseService.showPurchase(this.ORDER_PURCHASE_ID).subscribe((resp:any) => {
+      console.log(resp);
+      this.PURCHASE_SELECTED = resp.purchase;
+      this.full_name_user = this.PURCHASE_SELECTED.user.full_name;
+      this.sucursal_user = this.PURCHASE_SELECTED.user.sucursale.name;
+      this.warehouse_id = this.PURCHASE_SELECTED.warehouse_id;
+      this.provider_id = this.PURCHASE_SELECTED.provider_id;
+      this.date_emision = this.PURCHASE_SELECTED.date_emision;
+      this.type_comprobant = this.PURCHASE_SELECTED.type_comprobant;
+      this.n_comprobant = this.PURCHASE_SELECTED.n_comprobant;
+      this.description = this.PURCHASE_SELECTED.description;
+      this.PURCHASE_DETAILS = this.PURCHASE_SELECTED.details;
+      this.importe = this.PURCHASE_SELECTED.importe;
+      this.igv = this.PURCHASE_SELECTED.igv;
+      this.total = this.PURCHASE_SELECTED.total;
+      this.state = this.PURCHASE_SELECTED.state;
+      
+      if(this.warehouses.length == 0){
+        this.configAll();
+      }
+    })
+  }
 
   configAll(){
     this.purchaseService.configAll().subscribe((resp:any) => {
